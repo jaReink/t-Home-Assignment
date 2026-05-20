@@ -12,7 +12,7 @@ const FIXTURE_INPUT: NarrativeInput = {
     period: { from: '2024-01-01T00:00:00.000Z', to: '2024-04-01T00:00:00.000Z' },
     repo: 'testowner/testrepo',
     totalPrs: 8,
-    contributors: [{ login: 'alice', commits: 5, pullsMerged: 4, linesAdded: 200, linesDeleted: 50 }],
+    contributors: [{ login: 'author1', commits: 5, pullsMerged: 4, linesAdded: 200, linesDeleted: 50 }],
   },
   reviewHealth: {
     period: { from: '2024-01-01T00:00:00.000Z', to: '2024-04-01T00:00:00.000Z' },

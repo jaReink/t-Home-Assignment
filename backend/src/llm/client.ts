@@ -41,6 +41,8 @@ const STUB_RESPONSE: NarrativeResponse = {
   stub: true,
 }
 
+// STUB_RESPONSE.generatedAt is frozen at module load time — spread and override so each
+// call returns the actual request time rather than the server start time.
 function buildStub(): NarrativeResponse {
   return { ...STUB_RESPONSE, generatedAt: new Date().toISOString() }
 }
@@ -82,11 +84,15 @@ export async function generateNarrative(data: NarrativeInput): Promise<Narrative
     ],
   })
 
+  // Anthropic returns a ContentBlock[] discriminated union. We need the text block
+  // specifically; the second type check is required for TypeScript to narrow to TextBlock.
   const textBlock = message.content.find(block => block.type === 'text')
   const text = textBlock?.type === 'text' ? textBlock.text : ''
 
   try {
-    const parsed = JSON.parse(text)
+    // Strip markdown code fences if the model wraps its response (e.g. ```json ... ```)
+    const clean = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim()
+    const parsed = JSON.parse(clean)
     return { ...parsed, stub: false }
   } catch (err) {
     console.error('Failed to parse LLM response as JSON:', err)

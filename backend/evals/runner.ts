@@ -4,6 +4,7 @@ import { dirname, join } from 'node:path'
 import { generateNarrative, type NarrativeInput } from '../src/llm/client.js'
 import { score, type FixtureData } from './scorer.js'
 
+// ESM doesn't expose __dirname — reconstruct it from import.meta.url.
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const FIXTURES = ['healthy-team', 'review-theater', 'sparse-data', 'solo-contributor'] as const
