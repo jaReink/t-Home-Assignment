@@ -30,7 +30,7 @@ Open **http://localhost:5173**, enter `vercel` / `next.js` and a date range, cli
 
 - **Node.js** 18+ and **npm**
 - A **GitHub personal access token** with `repo` scope ([create one here](https://github.com/settings/tokens))
-- *(Optional)* An **Anthropic API key** for the AI narrative panel ([console.anthropic.com](https://console.anthropic.com)) — requires a $5 credit top-up, no free tier
+- *(Optional)* An **Anthropic API key** for the AI narrative panel ([console.anthropic.com](https://console.anthropic.com)) — requires credit
 
 ---
 
