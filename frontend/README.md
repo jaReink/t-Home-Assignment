@@ -1,4 +1,4 @@
-# Tempo Frontend
+# Frontend
 
 React + Vite single-page app that renders the four analytics panels. Talks to the backend over a local proxy — no CORS configuration needed in development.
 

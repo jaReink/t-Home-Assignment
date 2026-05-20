@@ -1,4 +1,4 @@
-# Tempo — GitHub Insights Dashboard
+# GitHub Insights Dashboard
 
 A full-stack tool that pulls GitHub PR, review, and commit data into a local SQLite database and surfaces it as an interactive analytics dashboard with four panels: contributor breakdown, review health, PR timing, and an AI-generated narrative.
 
