@@ -107,6 +107,7 @@ async function graphql(query: string, variables: Record<string, unknown>): Promi
     method: 'POST',
     headers: authHeaders(),
     body: JSON.stringify({ query, variables }),
+    signal: AbortSignal.timeout(30_000),
   })
 
   if (!res.ok) {
@@ -223,7 +224,7 @@ export async function fetchCommits(
     url.searchParams.set('per_page', '100')
     url.searchParams.set('page', String(page))
 
-    const res = await fetch(url, { headers: authHeaders() })
+    const res = await fetch(url, { headers: authHeaders(), signal: AbortSignal.timeout(30_000) })
 
     if (!res.ok) {
       if (res.status === 404) throw new GitHubError(`Repo ${owner}/${repo} not found`, 404)
@@ -232,6 +233,12 @@ export async function fetchCommits(
       const reset = res.headers.get('X-RateLimit-Reset')
       if (remaining === '0' && reset) throw new RateLimitError(new Date(Number(reset) * 1000))
       throw new GitHubError(`GitHub commits error: ${res.status}`, res.status)
+    }
+
+    const remaining = res.headers.get('X-RateLimit-Remaining')
+    const reset = res.headers.get('X-RateLimit-Reset')
+    if (remaining !== null && Number(remaining) < 10 && reset) {
+      throw new RateLimitError(new Date(Number(reset) * 1000))
     }
 
     const commits = CommitRestResponseSchema.parse(await res.json())

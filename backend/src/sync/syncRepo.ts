@@ -18,8 +18,8 @@ export class SyncConflictError extends Error {
   }
 }
 
-// In-memory lock — prevents duplicate concurrent syncs for the same repo.
-const syncInProgress = new Set<string>()
+// In-memory lock — maps repo key to the running sync Promise so callers can await it.
+const syncInProgress = new Map<string, Promise<SyncResult>>()
 
 function repoKey(owner: string, repo: string): string {
   return `${owner}/${repo}`
@@ -48,12 +48,11 @@ export async function syncRepo(
   const key = repoKey(owner, repo)
   if (syncInProgress.has(key)) throw new SyncConflictError(owner, repo)
 
-  syncInProgress.add(key)
-  try {
-    return await runSync(owner, repo, lookbackMonths)
-  } finally {
+  const promise = runSync(owner, repo, lookbackMonths).finally(() => {
     syncInProgress.delete(key)
-  }
+  })
+  syncInProgress.set(key, promise)
+  return promise
 }
 
 async function runSync(owner: string, repo: string, lookbackMonths?: number): Promise<SyncResult> {
@@ -171,7 +170,13 @@ async function runSync(owner: string, repo: string, lookbackMonths?: number): Pr
 
 export async function ensureSynced(owner: string, repo: string): Promise<void> {
   const key = repoKey(owner, repo)
-  if (syncInProgress.has(key)) return
+
+  // If a sync is already running, wait for it — data will be fresh when it finishes.
+  const inFlight = syncInProgress.get(key)
+  if (inFlight) {
+    await inFlight
+    return
+  }
 
   const meta = await getDb()
     .selectFrom('sync_meta')
@@ -180,14 +185,19 @@ export async function ensureSynced(owner: string, repo: string): Promise<void> {
     .where('repo', '=', repo)
     .executeTakeFirst()
 
-  if (!meta) {
-    await syncRepo(owner, repo)
+  const needsSync =
+    !meta ||
+    Date.now() - new Date(meta.synced_at).getTime() > config.CACHE_TTL_MINUTES * 60 * 1000
+
+  if (!needsSync) return
+
+  // A concurrent request may have started a sync between the staleness check above and here.
+  // If so, wait for it rather than starting a duplicate.
+  const raceCheck = syncInProgress.get(key)
+  if (raceCheck) {
+    await raceCheck
     return
   }
 
-  const ageMs = Date.now() - new Date(meta.synced_at).getTime()
-  const ttlMs = config.CACHE_TTL_MINUTES * 60 * 1000
-  if (ageMs > ttlMs) {
-    await syncRepo(owner, repo)
-  }
+  await syncRepo(owner, repo)
 }

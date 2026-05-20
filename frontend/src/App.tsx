@@ -86,10 +86,10 @@ export default function App() {
 
         {hasParams && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <ContributorsTable data={contributors.data} isLoading={contributors.isLoading} />
+            <NarrativePanel data={narrative.data} isLoading={narrative.isLoading} />
             <ReviewHealthPanel data={reviewHealth.data} isLoading={reviewHealth.isLoading} />
             <PrTimingChart data={prTiming.data} isLoading={prTiming.isLoading} />
-            <NarrativePanel data={narrative.data} isLoading={narrative.isLoading} />
+            <ContributorsTable data={contributors.data} isLoading={contributors.isLoading} />
           </div>
         )}
 

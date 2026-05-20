@@ -1,4 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk'
+import { z } from 'zod'
+import { config } from '../config.js'
 import type { ContributorsResult } from '../insights/contributors.js'
 import type { ReviewHealthResult } from '../insights/reviewHealth.js'
 import type { PrTimingResult } from '../insights/prTiming.js'
@@ -30,6 +32,25 @@ export interface NarrativeResponse {
   stub: boolean
 }
 
+const NarrativeSignalSchema = z.object({
+  observation: z.string(),
+  dataPoint: z.string(),
+  interpretation: z.string(),
+})
+
+const NarrativeResponseSchema = z.object({
+  headline: z.string(),
+  narrative: z.string(),
+  hypothesis: z.string().nullable(),
+  confidence: z.number(),
+  signals: z.array(NarrativeSignalSchema),
+  caveat: z.string().nullable(),
+})
+
+const client = config.ANTHROPIC_API_KEY
+  ? new Anthropic({ apiKey: config.ANTHROPIC_API_KEY })
+  : null
+
 const STUB_RESPONSE: NarrativeResponse = {
   headline: 'Stub narrative — set ANTHROPIC_API_KEY to enable',
   narrative: 'No API key configured.',
@@ -41,8 +62,6 @@ const STUB_RESPONSE: NarrativeResponse = {
   stub: true,
 }
 
-// STUB_RESPONSE.generatedAt is frozen at module load time — spread and override so each
-// call returns the actual request time rather than the server start time.
 function buildStub(): NarrativeResponse {
   return { ...STUB_RESPONSE, generatedAt: new Date().toISOString() }
 }
@@ -63,15 +82,13 @@ Rules:
 - Do not fabricate metrics not present in the input.
 
 Respond with valid JSON matching this schema exactly:
-{ "headline": string, "narrative": string, "hypothesis": string | null, "confidence": number, "signals": [{"observation": string, "dataPoint": string, "interpretation": string}], "caveat": string | null, "generatedAt": string }`
+{ "headline": string, "narrative": string, "hypothesis": string | null, "confidence": number, "signals": [{"observation": string, "dataPoint": string, "interpretation": string}], "caveat": string | null }`
 }
 
 export async function generateNarrative(data: NarrativeInput): Promise<NarrativeResponse> {
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!client) {
     return buildStub()
   }
-
-  const client = new Anthropic()
 
   const message = await client.messages.create({
     model: 'claude-haiku-4-5-20251001',
@@ -84,18 +101,16 @@ export async function generateNarrative(data: NarrativeInput): Promise<Narrative
     ],
   })
 
-  // Anthropic returns a ContentBlock[] discriminated union. We need the text block
-  // specifically; the second type check is required for TypeScript to narrow to TextBlock.
   const textBlock = message.content.find(block => block.type === 'text')
   const text = textBlock?.type === 'text' ? textBlock.text : ''
 
   try {
-    // Strip markdown code fences if the model wraps its response (e.g. ```json ... ```)
     const clean = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim()
     const parsed = JSON.parse(clean)
-    return { ...parsed, stub: false }
+    const validated = NarrativeResponseSchema.parse(parsed)
+    return { ...validated, generatedAt: new Date().toISOString(), stub: false }
   } catch (err) {
-    console.error('Failed to parse LLM response as JSON:', err)
-    return buildStub()
+    console.error('Failed to parse or validate LLM response:', err)
+    throw new Error('LLM returned an unexpected response format')
   }
 }

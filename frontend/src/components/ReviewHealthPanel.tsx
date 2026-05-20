@@ -17,7 +17,7 @@ function pct(rate: number): string {
 }
 
 export default function ReviewHealthPanel({ data, isLoading }: ReviewHealthPanelProps) {
-  const [reviewerOpen, setReviewerOpen] = useState(false)
+  const [reviewerOpen, setReviewerOpen] = useState(true)
 
   if (isLoading) {
     return (
@@ -66,9 +66,9 @@ export default function ReviewHealthPanel({ data, isLoading }: ReviewHealthPanel
             </button>
 
             {reviewerOpen && (
-              <div className="overflow-x-auto">
+              <div className="overflow-auto max-h-96">
                 <table className="w-full text-xs">
-                  <thead>
+                  <thead className="sticky top-0 z-10">
                     <tr className="bg-gray-50">
                       <th className="px-3 py-2 text-left font-medium text-gray-500">Reviewer</th>
                       <th className="px-3 py-2 text-right font-medium text-gray-500">Approvals</th>

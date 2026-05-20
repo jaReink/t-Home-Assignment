@@ -51,9 +51,9 @@ export default function ContributorsTable({ data, isLoading }: ContributorsTable
           <p className="text-xs text-gray-500 mt-0.5">{data.totalPrs} total PRs</p>
         )}
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-auto max-h-[400px]">
         <table className="w-full text-sm">
-          <thead>
+          <thead className="sticky top-0 z-10">
             <tr className="bg-gray-50">
               {COLUMNS.map((col) => (
                 <th
