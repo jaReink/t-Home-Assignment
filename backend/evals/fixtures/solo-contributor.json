@@ -1,0 +1,41 @@
+{
+  "owner": "acme",
+  "repo": "platform",
+  "from": "2024-01-01T00:00:00.000Z",
+  "to": "2024-04-01T00:00:00.000Z",
+  "contributors": {
+    "period": { "from": "2024-01-01T00:00:00.000Z", "to": "2024-04-01T00:00:00.000Z" },
+    "repo": "acme/platform",
+    "totalPrs": 30,
+    "contributors": [
+      { "login": "author1", "commits": 55, "pullsMerged": 30, "linesAdded": 5100, "linesDeleted": 980 }
+    ]
+  },
+  "reviewHealth": {
+    "period": { "from": "2024-01-01T00:00:00.000Z", "to": "2024-04-01T00:00:00.000Z" },
+    "repo": "acme/platform",
+    "totalMergedPrs": 30,
+    "overallSilentApprovalRate": 0.0,
+    "overallUnreviewedMergeRate": 1.0,
+    "reviewers": [],
+    "authors": [
+      { "login": "author1", "pullsMerged": 30, "unreviewedMerges": 30, "unreviewedMergeRate": 1.0 }
+    ]
+  },
+  "prTiming": {
+    "period": { "from": "2024-01-01T00:00:00.000Z", "to": "2024-04-01T00:00:00.000Z" },
+    "repo": "acme/platform",
+    "totalPrsWithReview": 0,
+    "medianPickupHours": 0,
+    "p75PickupHours": 0,
+    "p95PickupHours": 0,
+    "buckets": [
+      { "label": "0–2h", "count": 0, "pct": 0 },
+      { "label": "2–8h", "count": 0, "pct": 0 },
+      { "label": "8–24h", "count": 0, "pct": 0 },
+      { "label": "1–2d", "count": 0, "pct": 0 },
+      { "label": "2d+", "count": 0, "pct": 0 }
+    ],
+    "hourOfDayHeatmap": []
+  }
+}

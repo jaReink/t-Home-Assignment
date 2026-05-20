@@ -1,0 +1,48 @@
+{
+  "owner": "acme",
+  "repo": "platform",
+  "from": "2024-01-01T00:00:00.000Z",
+  "to": "2024-04-01T00:00:00.000Z",
+  "contributors": {
+    "period": { "from": "2024-01-01T00:00:00.000Z", "to": "2024-04-01T00:00:00.000Z" },
+    "repo": "acme/platform",
+    "totalPrs": 80,
+    "contributors": [
+      { "login": "author1", "commits": 45, "pullsMerged": 30, "linesAdded": 4200, "linesDeleted": 800 },
+      { "login": "author2", "commits": 38, "pullsMerged": 25, "linesAdded": 3100, "linesDeleted": 620 },
+      { "login": "author3", "commits": 20, "pullsMerged": 15, "linesAdded": 1800, "linesDeleted": 340 },
+      { "login": "author4", "commits": 18, "pullsMerged": 10, "linesAdded": 900, "linesDeleted": 210 }
+    ]
+  },
+  "reviewHealth": {
+    "period": { "from": "2024-01-01T00:00:00.000Z", "to": "2024-04-01T00:00:00.000Z" },
+    "repo": "acme/platform",
+    "totalMergedPrs": 80,
+    "overallSilentApprovalRate": 0.08,
+    "overallUnreviewedMergeRate": 0.0,
+    "reviewers": [
+      { "login": "reviewer1", "approvalsGiven": 40, "silentApprovals": 3, "silentApprovalRate": 0.075, "changesRequested": 12 },
+      { "login": "reviewer2", "approvalsGiven": 35, "silentApprovals": 3, "silentApprovalRate": 0.086, "changesRequested": 8 }
+    ],
+    "authors": [
+      { "login": "author1", "pullsMerged": 30, "unreviewedMerges": 0, "unreviewedMergeRate": 0 },
+      { "login": "author2", "pullsMerged": 25, "unreviewedMerges": 0, "unreviewedMergeRate": 0 }
+    ]
+  },
+  "prTiming": {
+    "period": { "from": "2024-01-01T00:00:00.000Z", "to": "2024-04-01T00:00:00.000Z" },
+    "repo": "acme/platform",
+    "totalPrsWithReview": 80,
+    "medianPickupHours": 3.5,
+    "p75PickupHours": 8.2,
+    "p95PickupHours": 18.4,
+    "buckets": [
+      { "label": "0–2h", "count": 22, "pct": 28 },
+      { "label": "2–8h", "count": 35, "pct": 44 },
+      { "label": "8–24h", "count": 18, "pct": 22 },
+      { "label": "1–2d", "count": 4, "pct": 5 },
+      { "label": "2d+", "count": 1, "pct": 1 }
+    ],
+    "hourOfDayHeatmap": []
+  }
+}

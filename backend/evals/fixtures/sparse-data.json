@@ -1,0 +1,45 @@
+{
+  "owner": "acme",
+  "repo": "platform",
+  "from": "2024-01-01T00:00:00.000Z",
+  "to": "2024-02-01T00:00:00.000Z",
+  "contributors": {
+    "period": { "from": "2024-01-01T00:00:00.000Z", "to": "2024-02-01T00:00:00.000Z" },
+    "repo": "acme/platform",
+    "totalPrs": 8,
+    "contributors": [
+      { "login": "author1", "commits": 10, "pullsMerged": 5, "linesAdded": 620, "linesDeleted": 130 },
+      { "login": "author2", "commits": 6, "pullsMerged": 3, "linesAdded": 310, "linesDeleted": 80 }
+    ]
+  },
+  "reviewHealth": {
+    "period": { "from": "2024-01-01T00:00:00.000Z", "to": "2024-02-01T00:00:00.000Z" },
+    "repo": "acme/platform",
+    "totalMergedPrs": 8,
+    "overallSilentApprovalRate": 0.33,
+    "overallUnreviewedMergeRate": 0.125,
+    "reviewers": [
+      { "login": "reviewer1", "approvalsGiven": 6, "silentApprovals": 2, "silentApprovalRate": 0.33, "changesRequested": 1 }
+    ],
+    "authors": [
+      { "login": "author1", "pullsMerged": 5, "unreviewedMerges": 1, "unreviewedMergeRate": 0.2 },
+      { "login": "author2", "pullsMerged": 3, "unreviewedMerges": 0, "unreviewedMergeRate": 0 }
+    ]
+  },
+  "prTiming": {
+    "period": { "from": "2024-01-01T00:00:00.000Z", "to": "2024-02-01T00:00:00.000Z" },
+    "repo": "acme/platform",
+    "totalPrsWithReview": 7,
+    "medianPickupHours": 12.0,
+    "p75PickupHours": 24.5,
+    "p95PickupHours": 48.0,
+    "buckets": [
+      { "label": "0–2h", "count": 1, "pct": 14 },
+      { "label": "2–8h", "count": 2, "pct": 29 },
+      { "label": "8–24h", "count": 3, "pct": 43 },
+      { "label": "1–2d", "count": 1, "pct": 14 },
+      { "label": "2d+", "count": 0, "pct": 0 }
+    ],
+    "hourOfDayHeatmap": []
+  }
+}
